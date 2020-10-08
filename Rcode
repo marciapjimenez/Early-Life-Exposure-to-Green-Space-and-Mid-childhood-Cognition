@@ -1,0 +1,12 @@
+## Analysis of life-course greenness impact on cognitive development - Project Viva
+
+# Exposure : Greenness at birth, early childhood and mid-childhood 
+# Outcomes: 
+# KBIT verbal and nonverbal (KBIT_verb_ss KBIT_nonverb_ss)
+# WRAML visual standard score or visual memory (WRAM_VIS_SS)
+# WRAML design memory standard score (WRDM_ss)
+# WRAML picture memory standard score (WRPM_ss)
+# WRAVMA  visual motor abilities (WRAVD_ss)
+# Mediators : physical activity (ap_h_3y) and air pollution (PM25_1km_yr3). All at early childhood.
+# Mediation only tested when main effects are significant 
+# Stratify by sex, parental education, NSES, pop density. 
