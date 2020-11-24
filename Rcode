@@ -10,3 +10,546 @@
 # Mediators : physical activity (ap_h_3y) and air pollution (PM25_1km_yr3). All at early childhood.
 # Mediation only tested when main effects are significant 
 # Stratify by sex, parental education, NSES, pop density. 
+
+
+
+######################################################
+#### Figures 1A-1D Natural splines ###################
+#### Final models included in the paper ##############
+######################################################
+
+
+library(mgcv)
+
+#### Figure 1A - Verbal IQ #####
+
+# NDVI birth p=0.06, 4 knots fit better than 3, based on AIC and also on EDF 
+model1<- gam(KBIT_verb_ss ~ s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+               agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+               medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC(model1)
+summary(model1)
+
+# plot(model1, las=1, ylab="Verbal intelligence at mid-childhood")
+
+# Early childhood  - NDVI at year 3 - 3 knots fit better than 4 according to AIC
+model1b<- gam(KBIT_verb_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1b)
+#plot(model1b, las=1, ylab="Verbal intelligence at mid-childhood")
+
+# Mid-childhood - Spline at birth *
+# NDVI at year 7 - 3 knots better than 4 based on AIC 
+model1c<- gam(KBIT_verb_ss ~ s(NDVI_90_year7, fx=TRUE, k=3) + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1c)
+AIC (model1c)
+#plot(model1c, las=1, ylab="Verbal intelligence at mid-childhood")
+
+
+#### Figure 1B - Non-Verbal IQ #######################
+
+# Birth 
+# 3 knots better than 4 based on AIC 
+model1<- gam(KBIT_nonverb_ss ~ s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+               agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+               medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1) 
+summary(model1)
+#plot(model1, las=1, ylab="Non-verbal intelligence at mid-childhood")
+
+
+# Early childhood  
+# NDVI at year 3 - 3 knots better than 4 
+# NDVI at year 3 * 
+model1b<- gam(KBIT_nonverb_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1b) 
+summary(model1b)
+#plot(model1b, las=1, ylab="Verbal intelligence at mid-childhood")
+
+# Mid-childhood  
+#NDVI at year 7 - 3 knots better than 4 
+model1c<- gam(KBIT_nonverb_ss ~ s(NDVI_90_year7, fx=TRUE, k=3) + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1c)
+summary(model1c)
+#plot(model1c, las=1, ylab="Verbal intelligence at mid-childhood")
+
+
+##### Figure 1C - Visual memory ########################################
+
+# Birth 
+# 3 knots better than 4 
+model1<- gam(WRAM_VIS_SS ~ s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+               agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+               medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1) 
+summary(model1)
+#plot(model1, las=1, ylab="Visual Memory at mid-childhood")
+
+# Early childhood  - spline at year 3 **
+# NDVI at yr3 - 3 knots better than 4 
+model1b<- gam(WRAM_VIS_SS ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1b) 
+summary(model1b)
+#plot(model1b, las=1, ylab="Visual Memory at mid-childhood")
+
+
+# Mid-childhood - spline at year 3 *
+# NDVI at yr 7 - 3 knots slightly better than 4 
+model1c<- gam(WRAM_VIS_SS ~ s(NDVI_90_year7, fx=TRUE, k=3) +  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3)  + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1c) 
+summary(model1c)
+#plot(model1c, las=1, ylab="Visual Memory at mid-childhood")
+
+##### Figure 1D - Visual motor abilities ################################
+
+# Birth 
+# 4 knots slightly better than 3 based on AIC 
+model1<- gam(WRAVD_ss ~ s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+               agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+               medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1) 
+summary(model1)
+#plot(model1, las=1, ylab="Visual Motor Abilities at mid-childhood")
+
+# Early childhood  - spline at year 3 *
+# NDVI at yr 3 - 3 knots slightly better than 4 based on AIC 
+model1b<- gam(WRAVD_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1b) 
+summary(model1b)
+#plot(model1b, las=1, ylab="Visual Motor Abilities at mid-childhood")
+
+# Mid-childhood 
+# NDVI at yr 7 - 3 knots better than 4 based on AIC 
+model1c<- gam(WRAVD_ss ~ s(NDVI_90_year7, fx=TRUE, k=3) + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1c) 
+summary(model1c)
+#plot(model1c, las=1, ylab="Visual Motor Abilities at mid-childhood")
+
+###### Compare linear models to non-linear models ########
+
+library(mgcv)
+
+### Verbal IQ 
+# Birth- spline **
+model1nl<- gam(KBIT_verb_ss ~ s(NDVI_90_birth) + white + female_d +
+               agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+               medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1nl)
+model1l<- gam(KBIT_verb_ss ~ NDVI_90_birth + white + female_d +
+               agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+               medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1l)
+model1q<- gam(KBIT_verb_ss ~ factor(NDVI_90_birth_4) +  white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1q)
+AIC(model1nl, model1l, model1q)
+
+
+
+###############################################
+###### Stratified Analysis ####################
+###### Figures 2A - 2C ########################
+
+#### Interaction terms for stratified analysis
+
+##### Sex and NSES #######
+
+# First create a function to run all models with the interaction term
+library(mgcv)
+function_interaction <- function(x)  {
+  model1<- gam(KBIT_verb_ss ~ s(NDVI_90_birth, fx=TRUE, k=3) + female_d+ white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_birth, by=x), data = data, na.action=na.omit )
+  model2<- gam(KBIT_nonverb_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d+ white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  model3b<- gam(WRAVD_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d+ white + 
+                  agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                  medhhinctr00_deliv+mKBIT_composite_ss +s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  model4b<- gam(WRAM_VIS_SS ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                  agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                  medhhinctr00_deliv+mKBIT_composite_ss +s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  results<-list(summary(model1),summary(model2), summary (model3b), summary (model4b))
+  return (results)
+}
+
+# Sex
+# motor abilities 0.05
+function_interaction(data$female_d) 
+
+# NSES 
+function_interaction(data$medhhinctr00_deliv) 
+
+### Individual SES and Urbanicity#####
+
+# First create a function 
+function_interaction <- function(x)  {
+  model1<- gam(KBIT_verb_ss ~ s(NDVI_90_birth, fx=TRUE, k=3) + female_d+ white + 
+                 agey_cogn_7y  + gt70k + individualSES+
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_birth, by=x), data = data, na.action=na.omit )
+  model2<- gam(KBIT_nonverb_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d+ white + 
+                 agey_cogn_7y  + gt70k + individualSES+
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  model3b<- gam(WRAVD_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d+ white + 
+                  agey_cogn_7y  + gt70k + individualSES+
+                  medhhinctr00_deliv+mKBIT_composite_ss +s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  model4b<- gam(WRAM_VIS_SS ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                  agey_cogn_7y  + gt70k + individualSES+
+                  medhhinctr00_deliv+mKBIT_composite_ss +s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  results<-list(summary(model1),summary(model2), summary (model3b), summary (model4b))
+  return (results)
+}
+function_interaction(data$individualSES) 
+
+library(mgcv)
+function_interaction_urb <- function(x)  {
+  model1<- gam(KBIT_verb_ss ~ s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + x + s(NDVI_90_birth, by=x), data = data, na.action=na.omit )
+  model2<- gam(KBIT_nonverb_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + x + s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  model3b<- gam(WRAVD_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4)  + female_d+ white + 
+                  agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                  medhhinctr00_deliv+mKBIT_composite_ss+ x  +s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  model4b<- gam(WRAM_VIS_SS ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3)+ female_d + white + 
+                  agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                  medhhinctr00_deliv+mKBIT_composite_ss+ x  +s(NDVI_90_year3, by=x), data = data, na.action=na.omit )
+  results<-list(summary(model1),summary(model2), summary (model3b), summary (model4b))
+  return (results)
+}
+
+function_interaction_urb(data$nlcd_urb01_deliv) 
+
+
+##########################################################
+###### Mediation analysis ################################
+##########################################################
+
+##### Mediation analysis by air pollution 
+
+## https://towardsdatascience.com/doing-and-reporting-your-first-mediation-analysis-in-r-2fe423b92171
+
+## Update per Emily's comment, Use black carbon for mediation analysis 
+
+#install.packages ("mediation")
+#The treatment can be either binary (integer or a two-valued factor) or continuous (numeric).
+library("mediation")
+set.seed(2020)
+library(mgcv)
+
+
+#Verbal IQ and greenness at birth: Exposure at birth, mediator at year 3, outcome at year 7
+
+med.fit <- gam(yr3bc_md ~ female_d + s(NDVI_90_birth, fx=TRUE, k=4) + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+out.fit<- gam(KBIT_verb_ss ~  yr3bc_md + s(NDVI_90_birth, fx=TRUE, k=4)  + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data)
+
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_birth", mediator = "yr3bc_md",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure - Not significant
+out.fit <- gam (KBIT_verb_ss ~ yr3bc_md +s(NDVI_90_birth, fx=TRUE, k=4) + white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_birth, fx=TRUE, k=4, by=yr3bc_md ), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_birth", mediator = "yr3bc_md",
+                   sims = 1000)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+
+#Non-Verbal IQ and greenness at birth: Exposure at birth, mediator at year 3, outcome at year 7
+## NDVI at yr3 is negatively associated with black carbon at yr3
+med.fit <- gam(yr3bc_md ~  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) +female_d  + white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+plot (med.fit, las=1, ylab="Black Carbon")
+# Black carbon at yr3 is positively associated with non-verbal IQ at yr7. 
+out.fit<- gam(KBIT_nonverb_ss ~  yr3bc_md +  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data)
+
+summary(out.fit)
+plot(out.fit,las=1, ylab="Non-verbal IQ")
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "yr3bc_md",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure - Not significant
+out.fit <- gam (KBIT_nonverb_ss ~ yr3bc_md +s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3)+ white + female_d + 
+                  agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                  medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, fx=TRUE, k=4, by=yr3bc_md ), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "yr3bc_md",
+                   sims = 1000)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+
+
+## Visual motor abilities and greenness at early childhood
+med.fit <- gam(yr3bc_md ~ female_d +  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4)  + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+out.fit <- gam(WRAVD_ss ~ yr3bc_md + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d+ white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss , data = data )
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "yr3bc_md",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure - Not significant
+out.fit <- gam (WRAVD_ss ~ yr3bc_md+ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4)  + white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, fx=TRUE, k=3, by=yr3bc_md), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "yr3bc_md",
+                   sims = 500)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+
+## Visual memory and greenness at early childhood
+
+med.fit <- gam(yr3bc_md ~ female_d + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+out.fit<- gam(WRAM_VIS_SS ~  yr3bc_md + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data )
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "yr3bc_md",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure - Not significant
+out.fit <- gam (WRAM_VIS_SS  ~ yr3bc_md+ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, fx=TRUE, k=3, by=yr3bc_md), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "yr3bc_md",
+                   sims = 500)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+##### Mediation analysis by physical activity 
+
+# Variables for PA:  "ap_h_3y" Physical activity variable based on weekday and weekend, derived by Sheryl. 
+
+## https://towardsdatascience.com/doing-and-reporting-your-first-mediation-analysis-in-r-2fe423b92171
+
+#install.packages ("mediation")
+#The treatment can be either binary (integer or a two-valued factor) or continuous (numeric).
+library("mediation")
+set.seed(2020)
+
+#For mediation analysis, we only tested the significant associations that we found in the main effects analysis 
+#Verbal IQ and greenness at birth; visual motor abilities and greenness at early childhood; and visual memory and greenness at early childhood
+
+#Verbal IQ and greenness at birth: Exposure at birth, mediator at year 3, outcome at year 7
+
+med.fit <- gam(ap_h_3y ~ female_d + s(NDVI_90_birth, fx=TRUE, k=4)  + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+out.fit<- gam(KBIT_verb_ss ~  ap_h_3y + s(NDVI_90_birth, fx=TRUE, k=4)  + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data)
+
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_birth", mediator = "ap_h_3y",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure - Not significant
+out.fit <- gam (KBIT_verb_ss ~ ap_h_3y +s(NDVI_90_birth, fx=TRUE, k=4)  + white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_birth, fx=TRUE, k=4, by=ap_h_3y), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_birth", mediator = "ap_h_3y",
+                   sims = 500)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+
+
+#Non-Verbal IQ and greenness at birth: Exposure at birth, mediator at year 3, outcome at year 7
+
+med.fit <- gam(ap_h_3y ~  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) +female_d  + white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+
+out.fit<- gam(KBIT_nonverb_ss ~  ap_h_3y +  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data)
+
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "ap_h_3y",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure - Not significant
+out.fit <- gam (KBIT_nonverb_ss ~ ap_h_3y +s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3)+ white + female_d + 
+                  agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                  medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, fx=TRUE, k=4, by=ap_h_3y ), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "ap_h_3y",
+                   sims = 1000)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+
+
+## Visual motor abilities and greenness at early childhood
+
+med.fit <- gam(ap_h_3y ~ female_d +  s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+out.fit <- gam(WRAVD_ss ~ap_h_3y + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d+ white + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss , data = data )
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "ap_h_3y",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure- Not significant
+out.fit <- gam (WRAVD_ss ~ ap_h_3y+ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, fx=TRUE, k=3, by=ap_h_3y), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "ap_h_3y",
+                   sims = 1000)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+## Visual memory and greenness at early childhood
+
+med.fit <- gam(ap_h_3y ~ female_d + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data=data)
+summary(med.fit)
+out.fit<- gam(WRAM_VIS_SS ~  ap_h_3y  + s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data )
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "ap_h_3y",
+                   sims = 1000)
+summary(med.out)
+#To test for interaction between mediator and exposure- Not significant
+out.fit <- gam (WRAM_VIS_SS  ~ ap_h_3y +s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3)+ white + female_d + 
+                 agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                 medhhinctr00_deliv+mKBIT_composite_ss + s(NDVI_90_year3, fx=TRUE, k=3, by=ap_h_3y), data=data)
+summary(out.fit)
+med.out <- mediate(med.fit, out.fit, boot=TRUE, treat = "NDVI_90_year3", mediator = "ap_h_3y",
+                   sims = 500)
+summary(med.out)
+test.TMint(med.out, conf.level = .95)
+
+######
+
+######################################################################################
+########## Get estimates from splines 
+######################################################################################
+
+###### Estimates for NON-VERBAL IQ  ##############################
+
+library(mgcv)
+model1b<- gam(KBIT_nonverb_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+AIC (model1b) 
+summary(model1b)
+
+plot(model1b, las=1, ylab="NON-VERBAL IQ")
+pred.exps <- predict(model1b, data, type='terms', se.fit=TRUE)
+newdat.exp <- data.frame(cbind(data$NDVI_90_year3, pred.exps$fit[,"s(NDVI_90_year3)"], pred.exps$se.fit[,"s(NDVI_90_year3)"]))
+names(newdat.exp) <- c("ndvi", "ndvifit", "ndvise")
+#create point estimates, lower confidence bounds, and upper bounds for predicted outcomes centered around mean value for your outcome (so plot of y axis is on the right scale)
+newdat.exp$pcqndvi <- newdat.exp$ndvifit +  mean(data$KBIT_nonverb_ss, na.rm=TRUE)
+newdat.exp$lcqndvi <- newdat.exp$ndvifit - 1.96*newdat.exp$ndvise +  mean(data$KBIT_nonverb_ss, na.rm=TRUE)
+newdat.exp$ucqndvi <- newdat.exp$ndvifit + 1.96*newdat.exp$ndvise  +  mean(data$KBIT_nonverb_ss, na.rm=TRUE)
+#order your new dataset by ndvi
+newdat.exp<-newdat.exp[order(newdat.exp[,"ndvi"]), ]
+names(newdat.exp)
+
+round(100*(mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi,  na.rm=TRUE, 0.5), 3))]) - 
+             mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.25), 3))]))/
+        mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.5),3))]),5)
+
+
+
+###### Estimates for VISUAL MEMORY ##############################
+
+library(mgcv)
+model1b<- gam(WRAM_VIS_SS ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=3) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1b)
+plot(model1b, las=1, ylab="Visual Memory at mid-childhood")
+pred.exps <- predict(model1b, data, type='terms', se.fit=TRUE)
+newdat.exp <- data.frame(cbind(data$NDVI_90_year3, pred.exps$fit[,"s(NDVI_90_year3)"], pred.exps$se.fit[,"s(NDVI_90_year3)"]))
+names(newdat.exp) <- c("ndvi", "ndvifit", "ndvise")
+#create point estimates, lower confidence bounds, and upper bounds for predicted outcomes centered around mean value for your outcome (so plot of y axis is on the right scale)
+newdat.exp$pcqndvi <- newdat.exp$ndvifit +  mean(data$WRAM_VIS_SS, na.rm=TRUE)
+newdat.exp$lcqndvi <- newdat.exp$ndvifit - 1.96*newdat.exp$ndvise +  mean(data$WRAM_VIS_SS, na.rm=TRUE)
+newdat.exp$ucqndvi <- newdat.exp$ndvifit + 1.96*newdat.exp$ndvise  +  mean(data$WRAM_VIS_SS, na.rm=TRUE)
+#order your new dataset by ndvi
+newdat.exp<-newdat.exp[order(newdat.exp[,"ndvi"]), ]
+names(newdat.exp)
+
+round(100*(mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi,  na.rm=TRUE, 0.5), 3))]) - 
+             mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.25), 3))]))/
+        mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.5),3))]),5)  
+
+
+#################### Estimates for Motor abilities ######################
+
+# Early childhood  - spline at year 3 *
+model1b<- gam(WRAVD_ss ~ s(NDVI_90_year3, fx=TRUE, k=3) + s(NDVI_90_birth, fx=TRUE, k=4) + female_d + white + 
+                agey_cogn_7y  +  coll_grad  + gt70k + pcoll_grad + 
+                medhhinctr00_deliv+mKBIT_composite_ss, data = data, na.action=na.omit )
+summary(model1b)
+plot(model1b, las=1, ylab="Visual Motor Abilities at mid-childhood")
+#### FIGURE 1C from paper
+pred.exps <- predict(model1b, data, type='terms', se.fit=TRUE)
+newdat.exp <- data.frame(cbind(data$NDVI_90_year3, pred.exps$fit[,"s(NDVI_90_year3)"], pred.exps$se.fit[,"s(NDVI_90_year3)"]))
+names(newdat.exp) <- c("ndvi", "ndvifit", "ndvise")
+#create point estimates, lower confidence bounds, and upper bounds for predicted outcomes centered around mean value for your outcome (so plot of y axis is on the right scale)
+newdat.exp$pcqndvi <- newdat.exp$ndvifit +  mean(data$WRAVD_ss, na.rm=TRUE)
+newdat.exp$lcqndvi <- newdat.exp$ndvifit - 1.96*newdat.exp$ndvise +  mean(data$WRAVD_ss, na.rm=TRUE)
+newdat.exp$ucqndvi <- newdat.exp$ndvifit + 1.96*newdat.exp$ndvise  +  mean(data$WRAVD_ss, na.rm=TRUE)
+#order your new dataset by ndvi
+newdat.exp<-newdat.exp[order(newdat.exp[,"ndvi"]), ]
+
+round(100*(mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi,  na.rm=TRUE, 0.5), 3))]) - 
+             mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.25), 3))]))/
+        mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.5),3))]),5)                                                                   
+
+round(100*(mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi,  na.rm=TRUE, 0.75), 3))]) - 
+             mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.5), 3))]))/
+        mean(newdat.exp$pcqndvi[which(round(newdat.exp$ndvi,3) == round(quantile(newdat.exp$ndvi, na.rm=TRUE, 0.75),3))]),5)                                                                   
+
+
